@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>IC App</title>
+  </head>
+  <body>
+    <nav class="navbar">IC App</nav>
+    <main class="main-wrapper">
+      <div class="main-container" id="msg-container">
+        <!-- <p class="left-msg">Hi</p> -->
+        <!-- <p class="right-msg">How are you..</p> -->
+      </div>
+      <div class="btn-container">
+        <input
+          type="text"
+          id="input-message"
+          placeholder="type message here..."
+        />
+        <button id="send-btn">Send</button>
+      </div>
+    </main>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const sendBtn = document.getElementById("send-btn");
+    const messageInput = document.getElementById("input-message");
+    const messageContainer = document.getElementById("msg-container");
+    // const leftMsg = document.getElementById("left-msg");
+    // const rightMsg = document.getElementById("right-msg");
+
+    socket.on("receive", (message) => {
+      console.log("left", message);
+      const msg = document.createElement("p");
+      msg.innerText = message;
+      msg.classList.add("left-msg");
+      messageContainer.appendChild(msg);
+    });
+
+    sendBtn.addEventListener("click", (e) => {
+      const msg = document.createElement("p");
+      const message = messageInput.value;
+      socket.emit("user-msg", message);
+      msg.innerText = message;
+      msg.classList.add("right-msg");
+      messageContainer.appendChild(msg);
+      messageInput.value = "";
+
+      //messageContainer.appendChild(msg);
+    });
+
+    // socket.on("receive", (message) => {
+    //   const msg = document.createElement("p");
+    //   msg.innerText = message;
+    //   messageContainer.appendChild(msg);
+    // });
+
+    // sendBtn.addEventListener("click", (e) => {
+    //   const message = messageInput.value;
+    //   socket.emit("user-msg", message);
+    //   messageInput.value = "";
+    // });
+  </script>
+</html>
