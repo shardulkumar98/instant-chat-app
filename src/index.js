@@ -9,7 +9,7 @@ const uuid = require("uuid");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static("./public"));
+app.use(express.static("../public"));
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(".public/index.html");
@@ -37,11 +37,11 @@ io.engine.generateId = (req) => uuid.v4();
 // const users = {};
 
 io.on("connection", (socket) => {
-  console.log("socket.id", socket.id);
-//   socket.on("user-joined", (name) => {
-//     users[socket.id] = name;
-//     socket.broadcast.emit()
-//   });
+  // console.log("socket.id", socket.id);
+  //   socket.on("user-joined", (name) => {
+  //     users[socket.id] = name;
+  //     socket.broadcast.emit()
+  //   });
 
   socket.on("user-msg", (message) => {
     socket.broadcast.emit("receive", message);
