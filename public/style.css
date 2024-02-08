@@ -65,3 +65,12 @@
     border-radius: 8px;
   }
 }
+
+.joined-user {
+  /* background: #d2e3c8; */
+  text-align: center;
+  color: #4b654d;
+  padding: 4px 8px;
+  margin: 2px 0;
+  clear: both;
+}

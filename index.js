@@ -9,7 +9,7 @@ const uuid = require("uuid");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static("../public"));
+app.use(express.static("./public"));
 
 app.get("/", (req, res) => {
   res.status(200).sendFile(".public/index.html");
@@ -19,33 +19,19 @@ app.get("/", (req, res) => {
 const httpServer = createServer(app);
 
 // setup sockets with http server
-const io = new Server(httpServer, {
-  // options
-  //   addTrailingSlash: false, // low-level engine options
-  //   allowEIO3: true, // enable compatibility with Socket.IO v2 clients
-  //   cookie: {
-  //     name: "my-cookie",
-  //     httpOnly: true,
-  //     sameSite: "strict",
-  //     maxAge: 86400,
-  //   },
-});
-
-// Set up generateId function for Socket.IO server
+const io = new Server(httpServer);
 io.engine.generateId = (req) => uuid.v4();
-
-// const users = {};
+const users = {};
 
 io.on("connection", (socket) => {
-  // console.log("socket.id", socket.id);
-  //   socket.on("user-joined", (name) => {
-  //     users[socket.id] = name;
-  //     socket.broadcast.emit()
-  //   });
+  socket.on("user-joined", (name) => {
+    users[socket.id] = name;
+    socket.broadcast.emit("joined", name);
+  });
 
   socket.on("user-msg", (message) => {
     socket.broadcast.emit("receive", message);
   });
 });
 
-httpServer.listen(3001, () => console.log("server is running..."));
+httpServer.listen(3001, () => console.log("server is running... on port 3001"));

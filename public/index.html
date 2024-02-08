@@ -12,6 +12,7 @@
       <div class="main-container" id="msg-container">
         <!-- <p class="left-msg">Hi</p> -->
         <!-- <p class="right-msg">How are you..</p> -->
+        <!-- <p class="joined-user">user joined</p> -->
       </div>
       <div class="btn-container">
         <input
@@ -29,8 +30,17 @@
     const sendBtn = document.getElementById("send-btn");
     const messageInput = document.getElementById("input-message");
     const messageContainer = document.getElementById("msg-container");
-    // const leftMsg = document.getElementById("left-msg");
-    // const rightMsg = document.getElementById("right-msg");
+    const userJoined = document.getElementById("joined-user");
+
+    const getUserName = window.prompt("Enter your name");
+    if (getUserName) socket.emit("user-joined", getUserName);
+
+    socket.on("joined", (message) => {
+      const msg = document.createElement("p");
+      msg.innerText = `${message} joined`;
+      msg.classList.add("joined-user");
+      messageContainer.appendChild(msg);
+    });
 
     socket.on("receive", (message) => {
       console.log("left", message);
@@ -48,20 +58,6 @@
       msg.classList.add("right-msg");
       messageContainer.appendChild(msg);
       messageInput.value = "";
-
-      //messageContainer.appendChild(msg);
     });
-
-    // socket.on("receive", (message) => {
-    //   const msg = document.createElement("p");
-    //   msg.innerText = message;
-    //   messageContainer.appendChild(msg);
-    // });
-
-    // sendBtn.addEventListener("click", (e) => {
-    //   const message = messageInput.value;
-    //   socket.emit("user-msg", message);
-    //   messageInput.value = "";
-    // });
   </script>
 </html>
